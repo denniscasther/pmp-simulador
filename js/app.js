@@ -442,6 +442,29 @@
 
   const cerrarMapa = () => $('mapa').classList.add('oculta');
 
+  /**
+   * Salir del examen sin terminarlo. Se pierde todo porque nada se guarda, así que
+   * se avisa con la cuenta de lo respondido antes de descartarlo.
+   */
+  function salirDelExamen() {
+    if (ex && ex.estado !== 'terminado') {
+      const respondidas = ex.items.filter(i => i.respuesta !== null).length;
+      const plural = respondidas === 1 ? '' : 's';
+      let aviso = 'Vas a salir del examen.\n\nNo se guarda nada: al salir se pierde.';
+      if (respondidas) {
+        aviso += '\n\nLlevas ' + respondidas + ' pregunta' + plural + ' respondida' + plural + '.';
+      }
+      aviso += '\n\n¿Salir de todas formas?';
+      if (!confirm(aviso)) return;
+    }
+    clearInterval(latido);
+    latido = null;
+    ex = null;
+    cerrarMapa();
+    pintarInicio();
+    mostrar('inicio');
+  }
+
   // ── Resultado ─────────────────────────────────────────────────────────────
 
   function terminar() {
@@ -518,6 +541,8 @@
   $('btn-cerrar-mapa').addEventListener('click', cerrarMapa);
   $('btn-terminar-seccion').addEventListener('click', function () { cerrarMapa(); intentarCerrarSeccion(); });
   $('btn-reanudar').addEventListener('click', reanudar);
+  $('btn-salir').addEventListener('click', salirDelExamen);
+  $('btn-salir-descanso').addEventListener('click', salirDelExamen);
   $('btn-volver').addEventListener('click', function () { ex = null; pintarInicio(); mostrar('inicio'); });
   $('btn-volver-temario').addEventListener('click', function () { mostrar('inicio'); });
 
