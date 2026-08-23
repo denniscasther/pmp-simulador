@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>simulador·pmp — rinde como en el examen real</title>
-<meta name="description" content="Simulador del examen PMP alineado al Examination Content Outline de julio de 2026: 180 preguntas, 240 minutos, secciones que no se pueden reabrir.">
+<title>simulador·cpmai — gestionar proyectos de IA</title>
+<meta name="description" content="Simulador del examen PMI-CPMAI alineado al Examination Content Outline 2025: 120 preguntas, 160 minutos, sin descansos.">
 <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
@@ -12,23 +12,21 @@
 <!-- ── INICIO ────────────────────────────────────────────── -->
 <main id="vista-inicio" class="vista">
   <header class="cabecera">
-    <p class="marca">simulador·pmp</p>
-    <h1>Rinde como en el examen real</h1>
+    <p class="marca">simulador·cpmai</p>
+    <h1>Gestionar proyectos de IA</h1>
     <p class="bajada">
-      Alineado al <strong>Examination Content Outline de julio de 2026</strong>, no a la
-      Guía del PMBOK. Tres dominios, 40 % predictivo y 60 % adaptativo, y las reglas que
-      de verdad cambian cómo se rinde: el reloj corre y
-      <strong>una sección cerrada no se vuelve a abrir</strong>.
+      Alineado al <strong>Examination Content Outline del PMI-CPMAI</strong>, edición 2025.
+      Cinco dominios, 37 tareas, y un examen que va de corrido:
+      <strong>120 preguntas en 160 minutos, sin descansos</strong>.
+    </p>
+    <p class="nota" style="margin-top:14px">
+      ¿Buscabas la PMP? <a href="./" style="color:var(--acento)">Ir al simulador de PMP →</a>
     </p>
   </header>
 
-  <p class="nota" style="margin-top:14px">
-    ¿Buscabas la CPMAI? <a href="cpmai.html" style="color:var(--acento)">Ir al simulador de PMI-CPMAI →</a>
-  </p>
-
   <section class="panel">
     <h2>Estudiar el temario</h2>
-    <p class="nota">Los conceptos ordenados y explicados, cada uno cruzado con las tareas del ECO que lo evalúan. Estudiar primero, rendir después.</p>
+    <p class="nota">Las 37 tareas del ECO explicadas con un ejemplo cada una. Más de la mitad del examen —el 52 %— es entender el negocio y los datos, no modelar.</p>
     <div class="tarjetas" id="ediciones"></div>
   </section>
 
@@ -42,13 +40,13 @@
 
   <footer class="pie">
     <p>
-      Las preguntas son <strong>originales</strong>, escritas contra el ECO. Aquí no
-      hay material del examen real: está bajo copyright y NDA.
+      Las preguntas son <strong>originales</strong>, escritas contra el ECO. Aquí no hay
+      material del examen real ni de simuladores comerciales, ni traducido ni adaptado.
     </p>
     <p>
-      Las bandas de desempeño son una <strong>heurística de estudio</strong>. PMI no
-      publica su nota de corte ni su algoritmo, así que ningún simulador puede
-      predecir si aprobarías — este tampoco.
+      Recuerda que para rendir el PMI-CPMAI es <strong>obligatorio completar antes el curso
+      preparatorio de PMI</strong>. Sin él, Pearson VUE no permite agendar el examen. Este
+      simulador es un complemento, nunca una ruta alternativa.
     </p>
   </footer>
 </main>
@@ -97,7 +95,7 @@
   <div class="mapa oculta" id="mapa">
     <div class="mapa-caja">
       <div class="mapa-cab">
-        <h2>Preguntas de esta sección</h2>
+        <h2>Preguntas del examen</h2>
         <button class="btn-plano" id="btn-cerrar-mapa">Cerrar</button>
       </div>
       <div class="leyenda">
@@ -116,10 +114,7 @@
   <div class="centrado">
     <p class="marca">Descanso</p>
     <p class="reloj grande" id="reloj-descanso"></p>
-    <p class="bajada">
-      El reloj del examen está detenido. La sección anterior quedó cerrada y sus
-      preguntas ya no se pueden modificar.
-    </p>
+    <p class="bajada">El reloj del examen está detenido.</p>
     <button class="btn-pri" id="btn-reanudar">Continuar ahora</button>
   </div>
 </main>
@@ -146,11 +141,45 @@
   <button class="btn-pri ancho" id="btn-volver">Volver al inicio</button>
 </main>
 
-<script src="js/eco.js"></script>
-<script src="js/eco-notas.js"></script>
-<script src="js/temario.js"></script>
-<script src="js/preguntas/semilla.js"></script>
+<script src="js/cpmai-eco.js"></script>
+<script src="js/cpmai-notas.js"></script>
+<script src="js/cpmai-temario.js"></script>
+<script src="js/cpmai-preguntas.js"></script>
 <script src="js/motor.js"></script>
+<script>
+  /* El formato del PMI-CPMAI, tomado del ECO oficial: 120 preguntas totales,
+     100 puntuadas y 20 piloto, 160 minutos, y una sola sección — el ECO dice
+     literalmente que no hay pausas programadas. */
+  const CONFIG_PAGINA = {
+    banco: PREGUNTAS_CPMAI,
+    puntuadas: 100,
+    notaBanco: 'Un examen completo necesita 120: 100 puntuadas repartidas 26 / 26 / 17 / 16 / 15 '
+      + 'según los pesos del ECO, más 20 piloto. Mientras no se llegue ahí, los exámenes salen '
+      + 'más cortos y el simulador lo dice en pantalla en vez de rellenar con repetidas.',
+    modos: [
+      {
+        id: 'completo', titulo: 'Examen completo',
+        desc: '120 preguntas, 160 minutos, de corrido y sin descansos. Idéntico al real.',
+        total: 120, minutos: 160, piloto: 20, secciones: 1
+      },
+      {
+        id: 'corto', titulo: 'Simulacro corto',
+        desc: '40 preguntas al mismo ritmo del examen real, para una sesión de estudio.',
+        total: 40, piloto: 6, secciones: 1
+      },
+      {
+        id: 'negocio', titulo: 'Práctica · Negocio',
+        desc: 'Solo necesidades y soluciones del negocio (26 % del examen), cronometrado igual.',
+        total: 20, piloto: 3, secciones: 1, dominios: ['negocio']
+      },
+      {
+        id: 'datos', titulo: 'Práctica · Datos',
+        desc: 'Solo necesidades de datos (26 % del examen), cronometrado igual.',
+        total: 20, piloto: 3, secciones: 1, dominios: ['datos']
+      }
+    ]
+  };
+</script>
 <script src="js/app.js"></script>
 </body>
 </html>

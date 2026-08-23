@@ -7,7 +7,12 @@
   'use strict';
 
   const $ = id => document.getElementById(id);
-  const BANCO = PREGUNTAS_SEMILLA;
+  // Cada página declara lo suyo antes de cargar este archivo: su banco, sus modos
+  // de examen y su formato. Así la misma interfaz sirve a la PMP y a la CPMAI, que
+  // tienen exámenes distintos (180/240 min con descansos frente a 120/160 sin ellos).
+  const PG = (typeof CONFIG_PAGINA !== 'undefined') ? CONFIG_PAGINA : {};
+  const BANCO = PG.banco || PREGUNTAS_SEMILLA;
+  const PUNTUADAS = PG.puntuadas || 170;
   const LETRAS = 'ABCDEFGH';
 
   let ex = null;
@@ -44,7 +49,7 @@
 
   // ── Inicio ────────────────────────────────────────────────────────────────
 
-  const MODOS = [
+  const MODOS = PG.modos || [
     {
       id: 'completo', titulo: 'Examen completo',
       desc: '180 preguntas, 240 minutos, tres secciones con dos descansos. Idéntico al real.',
@@ -96,7 +101,7 @@
     const cont = $('cobertura');
     cont.innerHTML = '';
     ECO.dominios.forEach(function (d) {
-      const ideal = ECO.repartir(170)[d.id];
+      const ideal = ECO.repartir(PUNTUADAS)[d.id];
       const hay = cob[d.id];
       const pct = Math.min(100, Math.round(hay * 100 / ideal));
       const fila = document.createElement('div');
@@ -113,9 +118,11 @@
     const nota = document.createElement('p');
     nota.className = 'nota';
     nota.style.marginTop = '16px';
-    nota.textContent = 'El banco tiene ' + total + ' preguntas. Un examen completo necesita 180, ' +
-      'repartidas 56 / 70 / 44 según los pesos del ECO de julio 2026. Mientras no se llegue ahí, ' +
-      'los exámenes salen más cortos y el simulador lo dice en pantalla en vez de rellenar con repetidas.';
+    nota.textContent = PG.notaBanco
+      ? 'El banco tiene ' + total + ' preguntas. ' + PG.notaBanco
+      : 'El banco tiene ' + total + ' preguntas. Un examen completo necesita 180, '
+        + 'repartidas 56 / 70 / 44 según los pesos del ECO de julio 2026. Mientras no se llegue ahí, '
+        + 'los exámenes salen más cortos y el simulador lo dice en pantalla en vez de rellenar con repetidas.';
     cont.appendChild(nota);
   }
 
@@ -289,6 +296,8 @@
       total: modo.total,
       minutos: modo.minutos,
       dominios: modo.dominios,
+      piloto: modo.piloto,
+      secciones: modo.secciones,
       semilla: Date.now()
     });
 
@@ -324,7 +333,7 @@
     const it = ex.items[ex.actual];
     const p = it.pregunta;
     const r = M.rangoSeccion(ex, ex.seccion);
-    const secciones = M.CONFIG.SECCIONES;
+    const secciones = ex.secciones || M.CONFIG.SECCIONES;
 
     texto($('etiqueta-seccion'), 'Sección ' + (ex.seccion + 1) + ' de ' + secciones);
     texto($('etiqueta-progreso'), (ex.actual - r.desde + 1) + ' de ' + (r.hasta - r.desde));
@@ -444,7 +453,7 @@
     texto($('res-resumen'),
       'Terminaste en ' + r.minutos + ' minutos. ' +
       (r.sinResponder ? r.sinResponder + ' preguntas quedaron sin responder. ' : '') +
-      'Las 10 preguntas piloto no se contaron.');
+      'Las ' + (ex.piloto || M.CONFIG.PILOTO) + ' preguntas piloto no se contaron.');
 
     const cont = $('res-dominios');
     cont.innerHTML = '';

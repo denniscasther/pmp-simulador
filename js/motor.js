@@ -58,7 +58,8 @@ function barajar(lista, rnd) {
 function armar(banco, opciones) {
   const o = Object.assign({ total: CONFIG.TOTAL, semilla: Date.now() }, opciones || {});
   const rnd = generador(o.semilla);
-  const puntuadas = Math.max(0, o.total - CONFIG.PILOTO);
+  const piloto = (o.piloto === undefined) ? CONFIG.PILOTO : o.piloto;
+  const puntuadas = Math.max(0, o.total - piloto);
   const cuota = ECO.repartir(puntuadas, o.dominios);
   const avisos = [];
   let elegidas = [];
@@ -85,7 +86,7 @@ function armar(banco, opciones) {
   elegidas.forEach(e => { usadas[e.p.id] = true; });
   const sobrante = barajar(
     banco.filter(p => !usadas[p.id] && idsDominio.indexOf(p.dominio) !== -1), rnd);
-  sobrante.slice(0, CONFIG.PILOTO).forEach(p => elegidas.push({ p: p, puntua: false }));
+  sobrante.slice(0, piloto).forEach(p => elegidas.push({ p: p, puntua: false }));
 
   return { preguntas: barajar(elegidas, rnd), avisos: avisos, semilla: o.semilla };
 }
@@ -113,6 +114,12 @@ function crearExamen(banco, opciones) {
 
   ex.total = ex.items.length;
 
+  // Cada certificación trae su propio formato. La PMP son 180 preguntas en tres
+  // tramos con dos descansos; la CPMAI son 120 de corrido, sin pausas. El motor no
+  // sabe de cuál se trata: recibe los números y los respeta.
+  ex.secciones = o.secciones || CONFIG.SECCIONES;
+  ex.piloto = (o.piloto === undefined) ? CONFIG.PILOTO : o.piloto;
+
   // Los modos cortos conservan el ritmo del examen real (240 min / 180 preguntas
   // ≈ 1 min 20 s por pregunta) en vez de dar tiempo de sobra: entrenar sin la
   // presión del reloj es justo lo que este simulador no quiere hacer.
@@ -138,7 +145,7 @@ function restante(ex) {
  * coherentes en vez de una sección llena y dos vacías.
  */
 function rangoSeccion(ex, seccion) {
-  const porSeccion = Math.ceil(ex.total / CONFIG.SECCIONES);
+  const porSeccion = Math.ceil(ex.total / (ex.secciones || CONFIG.SECCIONES));
   const desde = seccion * porSeccion;
   return { desde: desde, hasta: Math.min(desde + porSeccion, ex.total) };
 }
