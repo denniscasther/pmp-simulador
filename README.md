@@ -1,12 +1,30 @@
 # simulador·pmp
 
+**Publicado en https://pmp.wallpari.pe** — HTML estático servido por GitHub Pages.
+Para desplegar un cambio basta con empujar a `main`; Pages reconstruye solo.
+
+El repositorio vive en la cuenta personal **`denniscasther`**, no en la
+organización, por el dominio propio — mismo motivo que `coach-idiomas`:
+transferir un repo con dominio personalizado rompe la verificación y tumba el sitio.
+
+## Sobre el contenido publicado
+
+Todo el texto es **propio**. Del ECO se conservan solo datos — dominios, pesos y
+títulos de las 26 tareas —; la explicación de cada una y sus ejemplos están
+escritos aquí. **El PDF oficial del ECO es gratuito en pmi.org** y es donde debe
+consultarse el detalle textual de PMI.
+
+Los apuntes del curso en video son notas de estudio propias, con crédito y enlace
+al minuto exacto de cada clase: para el contenido completo, el video de
+**Marco Calle** (marcocalle.com).
+
 Simulador del examen **PMP** para prepararse rindiendo, no leyendo. Corre entero
 en el navegador: sin cuentas, sin claves de API y sin costo de operación.
 
 ```powershell
 cd C:\Plataformas\Proyectos\denniscasther\pmp-simulador
 .\servir.ps1            # Python, PHP o Node — el primero que encuentre, en :8081
-node prueba-motor.js    # 1155 pruebas, sin dependencias
+node prueba-motor.js    # 1163 pruebas, sin dependencias
 ```
 
 **No se abre con doble clic.** Con `file://` el navegador trata cada archivo como
@@ -222,10 +240,11 @@ cubrir las **26 tareas** del ECO 2026 en ambos enfoques.
 pmp-simulador/
 ├── index.html            # las cuatro vistas: inicio, examen, descanso, resultado
 ├── servir.ps1            # servidor local (Python | PHP | Node)
-├── prueba-motor.js       # 1155 pruebas, sin dependencias
+├── prueba-motor.js       # 1163 pruebas, sin dependencias
 ├── css/estilos.css
 └── js/
-    ├── eco.js            # el ECO: dominios, pesos, 26 tareas, 138 facilitadores
+    ├── eco.js            # el ECO: dominios, pesos y las 26 tareas
+    ├── eco-notas.js      # explicación propia de cada tarea, con ejemplo
     ├── temario.js        # el temario de estudio, cruzado con el ECO
     ├── motor.js          # armado, reloj, secciones, corrección · no toca el DOM
     ├── app.js            # interfaz
