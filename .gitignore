@@ -1,0 +1,13 @@
+# ── Ruido del sistema ───────────────────────────────────────────────────────
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ── Editores ────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+
+# ── Nada de node_modules: el proyecto es vanilla y no debe adquirir build ────
+node_modules/
+package-lock.json

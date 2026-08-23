@@ -1,0 +1,220 @@
+/* simulador·pmp — identidad sobria, pensada para 240 minutos de lectura. */
+
+:root {
+  --fondo:      #0F172A;
+  --superficie: #1E293B;
+  --superficie2:#293548;
+  --borde:      #334155;
+  --texto:      #E2E8F0;
+  --tenue:      #94A3B8;
+  --apagado:    #64748B;
+  --acento:     #38BDF8;
+  --bien:       #34D399;
+  --mal:        #F87171;
+  --alerta:     #FBBF24;
+  --radio:      12px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.vista { max-width: 860px; margin: 0 auto; padding: 32px 20px 64px; }
+.oculta { display: none !important; }
+
+/* ── Tipografía ─────────────────────────────────────────────────────────── */
+h1 { font-size: 30px; line-height: 1.25; margin: 0 0 16px; }
+h2 { font-size: 19px; margin: 0 0 16px; }
+.marca { margin: 0 0 6px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--apagado); }
+.bajada { color: var(--tenue); margin: 0 0 8px; }
+.nota { color: var(--apagado); font-size: 14px; margin: 0 0 16px; }
+.cabecera { margin-bottom: 32px; }
+.pie { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--borde); color: var(--apagado); font-size: 14px; }
+.pie p { margin: 0 0 10px; }
+
+/* ── Tarjetas de modo ───────────────────────────────────────────────────── */
+.tarjetas { display: grid; gap: 14px; margin-bottom: 32px; }
+.tarjeta {
+  background: var(--superficie); border: 1px solid var(--borde);
+  border-radius: var(--radio); padding: 20px; cursor: pointer;
+  text-align: left; color: inherit; font: inherit; width: 100%;
+  transition: border-color .15s, background .15s;
+}
+.tarjeta:hover:not(:disabled) { border-color: var(--acento); background: var(--superficie2); }
+.tarjeta:disabled { opacity: .45; cursor: not-allowed; }
+.tarjeta h3 { margin: 0 0 4px; font-size: 17px; }
+.tarjeta p { margin: 0; color: var(--tenue); font-size: 14px; }
+.tarjeta .meta { margin-top: 10px; color: var(--apagado); font-size: 13px; }
+
+/* ── Paneles ────────────────────────────────────────────────────────────── */
+.panel { background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio); padding: 20px; margin-bottom: 20px; }
+
+.fila { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--borde); }
+.fila:last-child { border-bottom: 0; }
+.fila-nombre { flex: 1; min-width: 0; }
+.fila-nombre small { display: block; color: var(--apagado); font-size: 13px; }
+.fila-dato { font-variant-numeric: tabular-nums; color: var(--tenue); white-space: nowrap; }
+
+.medidor { height: 6px; border-radius: 3px; background: var(--superficie2); overflow: hidden; margin-top: 6px; }
+.medidor i { display: block; height: 100%; background: var(--acento); }
+.medidor i.bien { background: var(--bien); }
+.medidor i.mal  { background: var(--mal); }
+
+/* ── Barra del examen ───────────────────────────────────────────────────── */
+.barra { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+.barra-izq, .barra-der { display: flex; align-items: center; gap: 10px; }
+.pastilla { background: var(--superficie); border: 1px solid var(--borde); border-radius: 999px; padding: 5px 12px; font-size: 13px; }
+.pastilla.tenue { color: var(--tenue); }
+.reloj { font-variant-numeric: tabular-nums; font-size: 20px; font-weight: 600; }
+.reloj.apremio { color: var(--alerta); }
+.reloj.critico { color: var(--mal); }
+.reloj.grande { font-size: 46px; display: block; margin: 12px 0 20px; }
+
+/* ── Pregunta ───────────────────────────────────────────────────────────── */
+.pregunta { background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio); padding: 24px; }
+.numero { margin: 0 0 12px; color: var(--apagado); font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+.enunciado { margin: 0 0 18px; font-size: 17px; line-height: 1.65; }
+.instruccion { margin: 0 0 14px; color: var(--alerta); font-size: 14px; }
+
+.opciones { display: grid; gap: 10px; }
+.opcion {
+  display: flex; gap: 12px; align-items: flex-start;
+  background: var(--fondo); border: 1px solid var(--borde);
+  border-radius: 10px; padding: 14px 16px; cursor: pointer;
+  text-align: left; color: inherit; font: inherit; width: 100%;
+  transition: border-color .15s, background .15s;
+}
+.opcion:hover { border-color: var(--apagado); }
+.opcion.elegida { border-color: var(--acento); background: rgba(56, 189, 248, .10); }
+.opcion .letra { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--borde); display: grid; place-items: center; font-size: 13px; color: var(--tenue); }
+.opcion.elegida .letra { border-color: var(--acento); color: var(--acento); }
+.opcion.correcta { border-color: var(--bien); background: rgba(52, 211, 153, .10); }
+.opcion.errada  { border-color: var(--mal);  background: rgba(248, 113, 113, .10); }
+
+/* ── Botones ────────────────────────────────────────────────────────────── */
+.acciones { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.acciones-der { display: flex; gap: 10px; margin-left: auto; }
+
+.btn-pri, .btn-sec, .btn-plano {
+  font: inherit; font-weight: 600; border-radius: 10px; padding: 11px 20px; cursor: pointer; border: 1px solid transparent;
+}
+.btn-pri   { background: var(--acento); color: #0F172A; }
+.btn-sec   { background: transparent; color: var(--texto); border-color: var(--borde); }
+.btn-plano { background: transparent; color: var(--tenue); border-color: var(--borde); padding: 8px 14px; font-weight: 500; font-size: 14px; }
+.btn-pri:disabled, .btn-sec:disabled { opacity: .4; cursor: not-allowed; }
+.btn-plano.activa { color: var(--alerta); border-color: var(--alerta); }
+.ancho { width: 100%; margin-top: 20px; }
+
+/* ── Mapa de preguntas ──────────────────────────────────────────────────── */
+.mapa { position: fixed; inset: 0; background: rgba(15, 23, 42, .88); display: grid; place-items: center; padding: 20px; z-index: 10; }
+.mapa-caja { background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio); padding: 22px; max-width: 620px; width: 100%; max-height: 88vh; overflow-y: auto; }
+.mapa-cab { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.leyenda { display: flex; gap: 16px; flex-wrap: wrap; color: var(--apagado); font-size: 13px; margin: 12px 0 16px; }
+.leyenda span { display: flex; align-items: center; gap: 6px; }
+.pt { width: 11px; height: 11px; border-radius: 3px; background: var(--superficie2); border: 1px solid var(--borde); display: inline-block; }
+.pt.respondida { background: var(--acento); border-color: var(--acento); }
+.pt.marcada { background: var(--alerta); border-color: var(--alerta); }
+
+.rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 8px; }
+.celda { background: var(--superficie2); border: 1px solid var(--borde); border-radius: 8px; padding: 9px 0; font: inherit; font-size: 14px; color: var(--tenue); cursor: pointer; font-variant-numeric: tabular-nums; }
+.celda.respondida { background: var(--acento); border-color: var(--acento); color: #0F172A; font-weight: 600; }
+.celda.marcada { border-color: var(--alerta); color: var(--alerta); }
+.celda.marcada.respondida { color: #0F172A; }
+.celda.actual { outline: 2px solid var(--texto); outline-offset: 1px; }
+
+/* ── Resultado ──────────────────────────────────────────────────────────── */
+.centrado { text-align: center; padding-top: 60px; }
+.banda { display: inline-block; border-radius: 999px; padding: 4px 12px; font-size: 13px; font-weight: 600; }
+.banda.sobre { background: rgba(52, 211, 153, .18); color: var(--bien); }
+.banda.objetivo { background: rgba(56, 189, 248, .18); color: var(--acento); }
+.banda.bajo { background: rgba(251, 191, 36, .18); color: var(--alerta); }
+.banda.deficiente { background: rgba(248, 113, 113, .18); color: var(--mal); }
+
+.revision { border: 1px solid var(--borde); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+.revision.bien { border-left: 3px solid var(--bien); }
+.revision.mal  { border-left: 3px solid var(--mal); }
+.revision .enunciado { font-size: 15px; margin-bottom: 10px; }
+.revision .explicacion { color: var(--tenue); font-size: 14px; margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--borde); }
+.revision .etiquetas { color: var(--apagado); font-size: 13px; margin: 0 0 10px; }
+
+@media (min-width: 620px) {
+  .tarjetas { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Temario ────────────────────────────────────────────────────────────── */
+.titulo-seccion { font-size: 19px; margin: 0 0 16px; }
+
+.grupo { margin-bottom: 28px; }
+.grupo > h2 { margin-bottom: 6px; }
+.grupo > .intro { color: var(--tenue); font-size: 15px; margin: 0 0 16px; }
+
+.tema { border: 1px solid var(--borde); border-radius: 10px; margin-bottom: 10px; background: var(--superficie); overflow: hidden; }
+.tema-cab {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  background: none; border: 0; color: inherit; font: inherit; font-weight: 600;
+  padding: 15px 18px; cursor: pointer; text-align: left;
+}
+.tema-cab:hover { background: var(--superficie2); }
+.tema-cab .marca-num { flex: 0 0 auto; color: var(--apagado); font-variant-numeric: tabular-nums; font-weight: 400; }
+.tema-cab .flecha { margin-left: auto; color: var(--apagado); transition: transform .15s; }
+.tema.abierto .tema-cab .flecha { transform: rotate(90deg); }
+
+.tema-cuerpo { display: none; padding: 0 18px 18px; }
+.tema.abierto .tema-cuerpo { display: block; }
+.tema-cuerpo dt { color: var(--acento); font-size: 13px; letter-spacing: .05em; text-transform: uppercase; margin-top: 14px; }
+.tema-cuerpo dd { margin: 4px 0 0; color: var(--texto); font-size: 15px; line-height: 1.6; }
+.tema-cuerpo dl { margin: 0; }
+
+.refs { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--borde); }
+.refs p { margin: 0 0 8px; color: var(--apagado); font-size: 13px; letter-spacing: .05em; text-transform: uppercase; }
+.ref { display: inline-block; background: var(--superficie2); border: 1px solid var(--borde); border-radius: 999px; padding: 4px 12px; margin: 0 6px 6px 0; font-size: 13px; color: var(--tenue); }
+
+.hueco { border: 1px dashed var(--alerta); border-radius: var(--radio); padding: 22px; background: rgba(251, 191, 36, .06); }
+.hueco p { margin: 0 0 12px; color: var(--tenue); font-size: 15px; line-height: 1.6; }
+.hueco p:last-child { margin-bottom: 0; }
+.hueco code { background: var(--superficie2); padding: 2px 6px; border-radius: 4px; font-size: 13px; color: var(--texto); }
+
+/* ── Temario: edición oficial y facilitadores ───────────────────────────── */
+.tarjeta.destacada { border-color: var(--acento); }
+.sello { display: inline-block; vertical-align: middle; margin-left: 8px; background: rgba(56,189,248,.18); color: var(--acento); border-radius: 999px; padding: 2px 9px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 600; }
+
+.insignia { margin-left: auto; background: var(--superficie2); border: 1px solid var(--borde); border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 500; color: var(--tenue); font-variant-numeric: tabular-nums; }
+.insignia.vacia { color: var(--alerta); border-color: rgba(251,191,36,.4); background: rgba(251,191,36,.08); }
+.tema-cab .flecha { margin-left: 12px; }
+
+ul.facilitadores { margin: 6px 0 0; padding-left: 20px; }
+ul.facilitadores li { color: var(--texto); font-size: 15px; line-height: 1.55; margin-bottom: 7px; }
+
+/* ── Gráficos y ejemplos del temario ────────────────────────────────────── */
+.grafico { margin: 16px 0 4px; padding: 16px; background: var(--fondo); border: 1px solid var(--borde); border-radius: 10px; overflow-x: auto; }
+.grafico svg { display: block; width: 100%; height: auto; max-width: 620px; margin: 0 auto; }
+.grafico text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
+.ejemplo { margin-top: 16px; padding: 14px 16px; border-left: 3px solid var(--acento); background: rgba(56, 189, 248, .07); border-radius: 0 8px 8px 0; }
+.ejemplo-cab { margin: 0 0 8px; font-size: 12px; letter-spacing: .07em; text-transform: uppercase; color: var(--acento); font-weight: 600; }
+.ejemplo p { margin: 0 0 9px; font-size: 15px; line-height: 1.6; color: var(--texto); }
+.ejemplo p:last-child { margin-bottom: 0; }
+.ejemplo strong { color: #F8FAFC; }
+.ejemplo .mal { color: var(--mal); }
+.ejemplo .bien { color: var(--bien); }
+
+/* ── Fichas de clase en video ───────────────────────────────────────────── */
+ul.momentos { list-style: none; margin: 6px 0 0; padding: 0; }
+ul.momentos li { margin-bottom: 6px; }
+ul.momentos a { display: flex; gap: 10px; align-items: baseline; color: var(--tenue); text-decoration: none; font-size: 14px; line-height: 1.5; }
+ul.momentos a:hover { color: var(--texto); }
+ul.momentos .min { flex: 0 0 auto; min-width: 44px; color: var(--acento); font-variant-numeric: tabular-nums; font-size: 13px; }
+
+.ver-clase { margin: 16px 0 0; }
+.ver-clase a { display: inline-block; border: 1px solid var(--borde); border-radius: 8px; padding: 8px 14px; color: var(--tenue); text-decoration: none; font-size: 14px; }
+.ver-clase a:hover { border-color: var(--acento); color: var(--acento); }
+
+.credito { margin-top: 18px; padding: 14px 16px; border: 1px dashed var(--borde); border-radius: 10px; color: var(--apagado); font-size: 13px; line-height: 1.6; }
+.credito a { color: var(--acento); }
