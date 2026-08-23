@@ -218,3 +218,29 @@ ul.momentos .min { flex: 0 0 auto; min-width: 44px; color: var(--acento); font-v
 
 .credito { margin-top: 18px; padding: 14px 16px; border: 1px dashed var(--borde); border-radius: 10px; color: var(--apagado); font-size: 13px; line-height: 1.6; }
 .credito a { color: var(--acento); }
+
+/* ── Selector de certificación ──────────────────────────────────────────── */
+/* Va arriba del todo en ambas páginas. Antes era una nota al pie de la cabecera
+   y nadie la encontraba: la segunda certificación parecía no existir. */
+.certs {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin: 0 0 26px;
+  padding: 5px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  width: fit-content;
+}
+.certs a {
+  display: block;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--tenue);
+  text-decoration: none;
+  transition: background .15s, color .15s;
+}
+.certs a:hover { color: var(--texto); }
+.certs a.activa { background: var(--acento); color: #0F172A; }
+.certs a:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
