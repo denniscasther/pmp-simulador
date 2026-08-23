@@ -244,3 +244,20 @@ ul.momentos .min { flex: 0 0 auto; min-width: 44px; color: var(--acento); font-v
 .certs a:hover { color: var(--texto); }
 .certs a.activa { background: var(--acento); color: #0F172A; }
 .certs a:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+/* ── Diálogo propio ─────────────────────────────────────────────────────── */
+/* Sustituye a confirm() y alert(). Los diálogos del navegador bloquean la página,
+   se ven mal en una sesión de horas y, si el usuario marca «impedir que esta página
+   cree cuadros de diálogo», confirm() devuelve false en silencio y el botón parece
+   roto. Este no puede fallar así. */
+.dialogo { position: fixed; inset: 0; background: rgba(15, 23, 42, .88); display: grid; place-items: center; padding: 20px; z-index: 20; }
+.dialogo-caja {
+  background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio);
+  padding: 26px 28px; max-width: 460px; width: 100%;
+}
+.dialogo-caja h2 { margin: 0 0 12px; font-size: 19px; }
+.dialogo-caja p { margin: 0 0 10px; color: var(--tenue); font-size: 15px; line-height: 1.6; }
+.dialogo-caja p:last-child { margin-bottom: 0; }
+.dialogo-caja strong { color: var(--texto); }
+.dialogo-caja .aviso-fuerte { color: var(--alerta); }
+.dialogo-acciones { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; flex-wrap: wrap; }

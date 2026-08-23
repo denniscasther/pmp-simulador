@@ -31,6 +31,46 @@
     return h > 0 ? h + ':' + dd(m) + ':' + dd(g) : dd(m) + ':' + dd(g);
   }
 
+  /**
+   * Diálogo propio, en lugar de confirm() y alert().
+   *
+   * Los del navegador bloquean la página, se ven mal en una sesión de horas y tienen
+   * un fallo silencioso: si el usuario marca «impedir que esta página cree cuadros de
+   * diálogo», confirm() devuelve false al instante y el botón que lo llamaba parece
+   * roto. Este no puede fallar así.
+   *
+   * opciones: { titulo, cuerpo (HTML), ok, cancelar, alAceptar, alCancelar }
+   * Si `cancelar` es null, se muestra como aviso de un solo botón.
+   */
+  function preguntar(o) {
+    const caja = $('dialogo');
+    texto($('dlg-titulo'), o.titulo);
+    $('dlg-cuerpo').innerHTML = o.cuerpo;
+
+    const btnOk = $('dlg-ok');
+    const btnCancelar = $('dlg-cancelar');
+    texto(btnOk, o.ok || 'Aceptar');
+    texto(btnCancelar, o.cancelar || 'Cancelar');
+    btnCancelar.classList.toggle('oculta', o.cancelar === null);
+
+    function cerrar() {
+      caja.classList.add('oculta');
+      btnOk.onclick = null;
+      btnCancelar.onclick = null;
+      document.removeEventListener('keydown', porTecla);
+    }
+    function porTecla(e) {
+      if (e.key === 'Escape') { cerrar(); if (o.alCancelar) o.alCancelar(); }
+    }
+
+    btnOk.onclick = function () { cerrar(); if (o.alAceptar) o.alAceptar(); };
+    btnCancelar.onclick = function () { cerrar(); if (o.alCancelar) o.alCancelar(); };
+    document.addEventListener('keydown', porTecla);
+
+    caja.classList.remove('oculta');
+    btnOk.focus();
+  }
+
   function mostrar(vista) {
     ['inicio', 'temario', 'examen', 'descanso', 'resultado'].forEach(function (v) {
       $('vista-' + v).classList.toggle('oculta', v !== vista);
@@ -301,7 +341,15 @@
       semilla: Date.now()
     });
 
-    if (!ex.total) { alert('El banco no tiene preguntas para este modo todavía.'); return; }
+    if (!ex.total) {
+      preguntar({
+        titulo: 'Todavía no hay preguntas',
+        cuerpo: '<p>El banco no tiene preguntas para este modo. Prueba con otro, o mira '
+          + 'el estado del banco en la pantalla de inicio.</p>',
+        ok: 'Entendido', cancelar: null
+      });
+      return;
+    }
 
     mostrar('examen');
     pintar();
@@ -383,28 +431,51 @@
    * Confirmación explícita antes de cerrar sección. Es el único punto sin
    * vuelta atrás del simulador, así que se dice con todas sus letras.
    */
+  /**
+   * Confirmación antes de cerrar sección. Es el único punto sin vuelta atrás del
+   * simulador, así que se dice con todas sus letras.
+   */
   function intentarCerrarSeccion() {
     const r = M.rangoSeccion(ex, ex.seccion);
     const sinResponder = ex.items.slice(r.desde, r.hasta).filter(i => i.respuesta === null).length;
     const marcadas = ex.items.slice(r.desde, r.hasta).filter(i => i.marcada).length;
+    const ultima = r.hasta >= ex.total;
 
-    let aviso = 'Vas a cerrar esta sección.\n\nNo podrás volver a estas preguntas.';
-    if (sinResponder) aviso += '\n\nQuedan ' + sinResponder + ' sin responder.';
-    if (marcadas) aviso += '\nTienes ' + marcadas + ' marcadas para revisar.';
-    aviso += '\n\n¿Continuar?';
+    function cerrar(conDescanso) {
+      M.cerrarSeccion(ex, conDescanso);
+      if (ex.estado === 'terminado') { terminar(); return; }
+      if (ex.estado === 'descanso') { mostrar('descanso'); tic(); return; }
+      pintar();
+    }
 
-    if (!confirm(aviso)) return;
+    let cuerpo = ultima
+      ? '<p>Vas a terminar el examen y ver tu resultado.</p>'
+      : '<p><strong>No podrás volver a estas preguntas</strong>, las hayas respondido o no.</p>';
+    if (sinResponder) {
+      cuerpo += '<p class="aviso-fuerte">Quedan ' + sinResponder + ' sin responder.</p>';
+    }
+    if (marcadas) {
+      cuerpo += '<p>Tienes ' + marcadas + ' marcada' + (marcadas === 1 ? '' : 's') + ' para revisar.</p>';
+    }
 
-    const habraDescanso = M.tocaDescanso(ex);
-    const tomar = habraDescanso
-      ? confirm('Puedes tomar 10 minutos de descanso.\n\nEl reloj del examen se detiene.\n\n¿Tomar el descanso?')
-      : false;
-
-    M.cerrarSeccion(ex, tomar);
-
-    if (ex.estado === 'terminado') { terminar(); return; }
-    if (ex.estado === 'descanso') { mostrar('descanso'); tic(); return; }
-    pintar();
+    preguntar({
+      titulo: ultima ? 'Terminar el examen' : 'Cerrar esta sección',
+      cuerpo: cuerpo,
+      ok: ultima ? 'Terminar y corregir' : 'Cerrar sección',
+      cancelar: 'Volver atrás',
+      alAceptar: function () {
+        if (!M.tocaDescanso(ex)) { cerrar(false); return; }
+        preguntar({
+          titulo: '¿Tomar el descanso?',
+          cuerpo: '<p>Puedes tomar 10 minutos. <strong>El reloj del examen se detiene</strong> '
+            + 'mientras dure.</p>',
+          ok: 'Tomar descanso',
+          cancelar: 'Seguir sin descanso',
+          alAceptar: function () { cerrar(true); },
+          alCancelar: function () { cerrar(false); }
+        });
+      }
+    });
   }
 
   function reanudar() {
@@ -446,23 +517,38 @@
    * Salir del examen sin terminarlo. Se pierde todo porque nada se guarda, así que
    * se avisa con la cuenta de lo respondido antes de descartarlo.
    */
+  /**
+   * Salir del examen sin terminarlo. Se pierde todo porque nada se guarda, así que
+   * se avisa con la cuenta de lo respondido antes de descartarlo.
+   */
   function salirDelExamen() {
-    if (ex && ex.estado !== 'terminado') {
-      const respondidas = ex.items.filter(i => i.respuesta !== null).length;
-      const plural = respondidas === 1 ? '' : 's';
-      let aviso = 'Vas a salir del examen.\n\nNo se guarda nada: al salir se pierde.';
-      if (respondidas) {
-        aviso += '\n\nLlevas ' + respondidas + ' pregunta' + plural + ' respondida' + plural + '.';
-      }
-      aviso += '\n\n¿Salir de todas formas?';
-      if (!confirm(aviso)) return;
+    function descartar() {
+      clearInterval(latido);
+      latido = null;
+      ex = null;
+      cerrarMapa();
+      pintarInicio();
+      mostrar('inicio');
     }
-    clearInterval(latido);
-    latido = null;
-    ex = null;
-    cerrarMapa();
-    pintarInicio();
-    mostrar('inicio');
+
+    if (!ex || ex.estado === 'terminado') { descartar(); return; }
+
+    const respondidas = ex.items.filter(i => i.respuesta !== null).length;
+    const plural = respondidas === 1 ? '' : 's';
+    let cuerpo = '<p>El examen vive solo en esta pestaña: <strong>al salir se pierde</strong>, '
+      + 'no se guarda nada.</p>';
+    if (respondidas) {
+      cuerpo += '<p class="aviso-fuerte">Llevas ' + respondidas + ' pregunta' + plural
+        + ' respondida' + plural + '.</p>';
+    }
+
+    preguntar({
+      titulo: 'Salir del examen',
+      cuerpo: cuerpo,
+      ok: 'Salir y descartar',
+      cancelar: 'Seguir con el examen',
+      alAceptar: descartar
+    });
   }
 
   // ── Resultado ─────────────────────────────────────────────────────────────
