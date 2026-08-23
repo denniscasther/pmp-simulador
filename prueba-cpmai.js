@@ -9,6 +9,7 @@ const { ECO } = require('./js/cpmai-eco.js');
 global.ECO = ECO;
 const { CPMAI_NOTAS } = require('./js/cpmai-notas.js');
 global.CPMAI_NOTAS = CPMAI_NOTAS;
+global.CPMAI_CONCEPTOS = require('./js/cpmai-conceptos.js').CPMAI_CONCEPTOS;
 const { TEMARIO } = require('./js/cpmai-temario.js');
 const { PREGUNTAS_CPMAI } = require('./js/cpmai-preguntas.js');
 const M = require('./js/motor.js');
@@ -87,6 +88,29 @@ const exPmp = M.crearExamen(banco, { total: 180, minutos: 240, semilla: 4, ahora
 igual('el formato por defecto sigue siendo el de la PMP', exPmp.secciones, 3);
 igual('y sus 10 piloto', exPmp.piloto, 10);
 
+// ── La pestaña de conceptos ─────────────────────────────────────────────────
+// Es material propio, no derivado del ECO, así que se comprueba aparte.
+const conc = TEMARIO.edicion('conceptos');
+comprobar('existe la pestaña de conceptos', conc !== null);
+igual('trae seis bloques', conc.grupos.length, 6);
+const tc = TEMARIO.temas('conceptos');
+comprobar('tiene al menos 30 temas', tc.length >= 30);
+comprobar('todo tema explica la idea', tc.every(t => t.idea.length > 90));
+comprobar('todo tema trae ejemplo', tc.every(t => t.ejemplo.indexOf('<p') === 0));
+comprobar('todo tema cruza con el ECO', tc.every(t => t.eco.length > 0));
+comprobar('ningún enlace al ECO está roto',
+  tc.every(t => t.eco.every(r => TEMARIO.tarea(r) !== null)));
+
+const conGrafico = tc.filter(t => t.grafico);
+comprobar('hay diagramas donde ayudan', conGrafico.length >= 6);
+conGrafico.forEach(function (t) {
+  comprobar(t.id + ': el diagrama es un SVG completo',
+    t.grafico.indexOf('<svg') === 0 && t.grafico.slice(-6) === '</svg>');
+  comprobar(t.id + ': declara viewBox para escalar', t.grafico.indexOf('viewBox=') !== -1);
+  comprobar(t.id + ': usa la paleta de la página, no colores fijos',
+    t.grafico.indexOf('var(--') !== -1);
+});
+
 // ── Informe ─────────────────────────────────────────────────────────────────
 console.log('\n  ' + ok + ' pruebas pasaron');
 if (fallos.length) {
@@ -95,4 +119,6 @@ if (fallos.length) {
   process.exit(1);
 }
 console.log('  CPMAI: ' + PREGUNTAS_CPMAI.length + ' preguntas · '
-  + TEMARIO.temas('eco-cpmai').length + ' tareas en el temario\n');
+  + TEMARIO.temas('eco-cpmai').length + ' tareas del ECO · '
+  + TEMARIO.temas('conceptos').length + ' conceptos con '
+  + TEMARIO.temas('conceptos').filter(t => t.grafico).length + ' diagramas\n');

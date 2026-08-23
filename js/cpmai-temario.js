@@ -39,6 +39,9 @@ const TEMARIO = { ediciones: [] };
   });
 })();
 
+/* La pestaña de conceptos va después del ECO: primero qué se evalúa, luego cómo entenderlo. */
+if (typeof CPMAI_CONCEPTOS !== 'undefined') TEMARIO.ediciones.push(CPMAI_CONCEPTOS);
+
 /** Mismas utilidades que el temario de la PMP, para que `app.js` no note la diferencia. */
 TEMARIO.edicion = function (id) {
   return TEMARIO.ediciones.find(e => e.id === id) || null;
