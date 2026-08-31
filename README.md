@@ -3,6 +3,28 @@
 **Publicado en https://pmp.wallpari.pe** — HTML estático servido por GitHub Pages.
 Para desplegar un cambio basta con empujar a `main`; Pages reconstruye solo.
 
+## Dos certificaciones
+
+| | Página | Examen |
+|---|---|---|
+| **PMP** | `index.html` | 180 preguntas · 240 min · 3 tramos con 2 descansos |
+| **PMI-CPMAI** | `cpmai.html` | 120 preguntas · 160 min · una sola sección, sin descansos |
+
+Se cambia entre ambas con el selector de arriba. Comparten motor e interfaz: `motor.js`
+recibe el formato de cada examen y lo respeta sin saber de qué certificación se trata,
+y `app.js` se parametriza con `CONFIG_PAGINA`, que cada página declara.
+
+**CPMAI** trae su propio ECO 2025 —5 dominios, 37 tareas, 38 preguntas que cubren todas—
+y una pestaña de **32 conceptos de IA con 8 diagramas**, porque no hay libro que comprar:
+PMI vende el curso y el ECO es un índice.
+
+```powershell
+node prueba-motor.js    # 1163 pruebas · PMP
+node prueba-cpmai.js    #  352 pruebas · CPMAI
+```
+
+Las dos suites van aparte porque cada certificación define su propio `ECO` global.
+
 El repositorio vive en la cuenta personal **`denniscasther`**, no en la
 organización, por el dominio propio — mismo motivo que `coach-idiomas`:
 transferir un repo con dominio personalizado rompe la verificación y tumba el sitio.
