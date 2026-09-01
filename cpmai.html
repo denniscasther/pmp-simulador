@@ -162,13 +162,17 @@
 <script src="js/cpmai-conceptos.js"></script>
 <script src="js/cpmai-temario.js"></script>
 <script src="js/cpmai-preguntas.js"></script>
+<!-- Banco adaptado de material de terceros, cargado aparte del propio. Si el
+     archivo no está, la página funciona igual con las 38 preguntas propias. -->
+<script src="js/preguntas/cpmai-adaptadas.js" onerror="void 0"></script>
 <script src="js/motor.js"></script>
 <script>
   /* El formato del PMI-CPMAI, tomado del ECO oficial: 120 preguntas totales,
      100 puntuadas y 20 piloto, 160 minutos, y una sola sección — el ECO dice
      literalmente que no hay pausas programadas. */
   const CONFIG_PAGINA = {
-    banco: PREGUNTAS_CPMAI,
+    banco: PREGUNTAS_CPMAI.concat(
+      typeof PREGUNTAS_CPMAI_EXTRA !== 'undefined' ? PREGUNTAS_CPMAI_EXTRA : []),
     puntuadas: 100,
     notaBanco: 'Un examen completo necesita 120: 100 puntuadas repartidas 26 / 26 / 17 / 16 / 15 '
       + 'según los pesos del ECO, más 20 piloto. Mientras no se llegue ahí, los exámenes salen '

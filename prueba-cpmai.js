@@ -14,6 +14,14 @@ const { TEMARIO } = require('./js/cpmai-temario.js');
 const { PREGUNTAS_CPMAI } = require('./js/cpmai-preguntas.js');
 const M = require('./js/motor.js');
 
+// Banco adaptado de material de terceros. Va aparte del propio, y mientras esté
+// presente se valida con el mismo rigor.
+let PREGUNTAS_EXTRA = [];
+try {
+  PREGUNTAS_EXTRA = require('./js/preguntas/cpmai-adaptadas.js').PREGUNTAS_CPMAI_EXTRA;
+} catch (e) { /* no está: es lo normal en un clon limpio */ }
+const TODAS = PREGUNTAS_CPMAI.concat(PREGUNTAS_EXTRA);
+
 let ok = 0, fallos = [];
 function comprobar(nombre, cond, detalle) {
   if (cond) { ok++; } else { fallos.push(nombre + (detalle ? ' → ' + detalle : '')); }
@@ -46,7 +54,7 @@ igual('no sobran notas huérfanas',
 
 // ── El banco ────────────────────────────────────────────────────────────────
 const vistos = {};
-PREGUNTAS_CPMAI.forEach(function (p) {
+TODAS.forEach(function (p) {
   comprobar('id único: ' + p.id, !vistos[p.id]); vistos[p.id] = true;
   const d = ECO.dominio(p.dominio);
   comprobar(p.id + ' apunta a un dominio real', d !== null);
@@ -118,7 +126,8 @@ if (fallos.length) {
   fallos.forEach(f => console.log('    ✗ ' + f));
   process.exit(1);
 }
-console.log('  CPMAI: ' + PREGUNTAS_CPMAI.length + ' preguntas · '
+console.log('  CPMAI: ' + PREGUNTAS_CPMAI.length + ' preguntas propias'
+  + (PREGUNTAS_EXTRA.length ? ' + ' + PREGUNTAS_EXTRA.length + ' adaptadas' : '') + ' · '
   + TEMARIO.temas('eco-cpmai').length + ' tareas del ECO · '
   + TEMARIO.temas('conceptos').length + ' conceptos con '
   + TEMARIO.temas('conceptos').filter(t => t.grafico).length + ' diagramas\n');

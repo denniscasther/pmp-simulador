@@ -14,13 +14,14 @@ Se cambia entre ambas con el selector de arriba. Comparten motor e interfaz: `mo
 recibe el formato de cada examen y lo respeta sin saber de qué certificación se trata,
 y `app.js` se parametriza con `CONFIG_PAGINA`, que cada página declara.
 
-**CPMAI** trae su propio ECO 2025 —5 dominios, 37 tareas, 38 preguntas que cubren todas—
+**CPMAI** trae su propio ECO 2025 —5 dominios, 37 tareas, 157 preguntas: 38 propias que
+cubren las 37 tareas, más 119 adaptadas de terceros (ver la excepción más abajo)—
 y una pestaña de **32 conceptos de IA con 8 diagramas**, porque no hay libro que comprar:
 PMI vende el curso y el ECO es un índice.
 
 ```powershell
 node prueba-motor.js    # 1163 pruebas · PMP
-node prueba-cpmai.js    #  352 pruebas · CPMAI
+node prueba-cpmai.js    # 1066 pruebas · CPMAI
 ```
 
 Las dos suites van aparte porque cada certificación define su propio `ECO` global.
@@ -31,14 +32,29 @@ transferir un repo con dominio personalizado rompe la verificación y tumba el s
 
 ## Sobre el contenido publicado
 
-Todo el texto es **propio**. Del ECO se conservan solo datos — dominios, pesos y
-títulos de las 26 tareas —; la explicación de cada una y sus ejemplos están
-escritos aquí. **El PDF oficial del ECO es gratuito en pmi.org** y es donde debe
-consultarse el detalle textual de PMI.
+Todo el texto es **propio, con una excepción declarada** (`cpmai-adaptadas.js`, más
+abajo). Del ECO se conservan solo datos — dominios, pesos y títulos de las 26
+tareas —; la explicación de cada una y sus ejemplos están escritos aquí. **El PDF
+oficial del ECO es gratuito en pmi.org** y es donde debe consultarse el detalle
+textual de PMI.
 
 Los apuntes del curso en video son notas de estudio propias, con crédito y enlace
 al minuto exacto de cada clase: para el contenido completo, el video de
 **Marco Calle** (marcocalle.com).
+
+### La excepción: `js/preguntas/cpmai-adaptadas.js`
+
+Ese archivo **no es material propio** y por eso vive aparte del banco de
+`js/cpmai-preguntas.js`. Contiene 119 preguntas adaptadas al español a partir de
+una prueba de práctica de un simulador comercial de terceros: los escenarios y las
+opciones son traducción adaptada del original, y solo las explicaciones se
+reescribieron. Se publica por **decisión explícita del autor del repositorio**
+(2026-08-31), como excepción declarada y acotada a la regla de arriba.
+
+La separación en dos archivos es deliberada: `cpmai.html` carga el adaptado solo
+si existe, así que **borrar ese único archivo devuelve el sitio a material 100 %
+propio** sin tocar ninguna otra cosa. `prueba-cpmai.js` lo valida con el mismo
+rigor que el banco propio cuando lo encuentra, y lo ignora cuando no está.
 
 Simulador del examen **PMP** para prepararse rindiendo, no leyendo. Corre entero
 en el navegador: sin cuentas, sin claves de API y sin costo de operación.
@@ -214,10 +230,14 @@ apoyo; lo que está mal es el andamiaje.
 
 ## Las preguntas
 
-**Regla innegociable: aquí no entra material del examen real ni de simuladores
-comerciales.** Las preguntas de PMI están bajo copyright y NDA. Todo lo que hay en
-`js/preguntas/` se escribe de cero contra las tareas del ECO. Si dudas del origen
-de una pregunta, no la incluyas.
+**Regla del banco propio: aquí no entra material del examen real de PMI.** Sus
+preguntas están bajo copyright y NDA. `js/preguntas/semilla.js` y
+`js/cpmai-preguntas.js` se escriben de cero contra las tareas del ECO; si dudas
+del origen de una pregunta, no la incluyas ahí.
+
+El material adaptado de terceros va **en su propio archivo**, nunca mezclado con
+el propio: hoy eso es `js/preguntas/cpmai-adaptadas.js` (ver la excepción descrita
+arriba).
 
 Cada pregunta lleva **explicación de por qué la correcta lo es y por qué las otras
 no**. Eso es lo que convierte un simulador en material de estudio.
