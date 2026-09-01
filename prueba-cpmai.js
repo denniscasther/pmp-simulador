@@ -14,12 +14,13 @@ const { TEMARIO } = require('./js/cpmai-temario.js');
 const { PREGUNTAS_CPMAI } = require('./js/cpmai-preguntas.js');
 const M = require('./js/motor.js');
 
-// Banco adaptado de material de terceros. Va aparte del propio, y mientras esté
-// presente se valida con el mismo rigor.
-let PREGUNTAS_EXTRA = [];
-try {
-  PREGUNTAS_EXTRA = require('./js/preguntas/cpmai-adaptadas.js').PREGUNTAS_CPMAI_EXTRA;
-} catch (e) { /* no está: es lo normal en un clon limpio */ }
+// Bancos adaptados de material de terceros. Van aparte del propio, y mientras
+// estén presentes se validan con el mismo rigor.
+function cargarAdaptado(ruta, clave) {
+  try { return require(ruta)[clave] || []; } catch (e) { return []; }
+}
+const PREGUNTAS_EXTRA = cargarAdaptado('./js/preguntas/cpmai-adaptadas.js', 'PREGUNTAS_CPMAI_EXTRA')
+  .concat(cargarAdaptado('./js/preguntas/cpmai-adaptadas-2.js', 'PREGUNTAS_CPMAI_EXTRA2'));
 const TODAS = PREGUNTAS_CPMAI.concat(PREGUNTAS_EXTRA);
 
 let ok = 0, fallos = [];

@@ -162,32 +162,42 @@
 <script src="js/cpmai-conceptos.js"></script>
 <script src="js/cpmai-temario.js"></script>
 <script src="js/cpmai-preguntas.js"></script>
-<!-- Banco adaptado de material de terceros, cargado aparte del propio. Si el
-     archivo no está, la página funciona igual con las 38 preguntas propias. -->
+<!-- Bancos adaptados de material de terceros, cargados aparte del propio. Si un
+     archivo no está, la página funciona igual con lo que sí encuentre. -->
 <script src="js/preguntas/cpmai-adaptadas.js" onerror="void 0"></script>
+<script src="js/preguntas/cpmai-adaptadas-2.js" onerror="void 0"></script>
 <script src="js/motor.js"></script>
 <script>
   /* El formato del PMI-CPMAI, tomado del ECO oficial: 120 preguntas totales,
      100 puntuadas y 20 piloto, 160 minutos, y una sola sección — el ECO dice
      literalmente que no hay pausas programadas. */
+  /* Cada prueba adaptada existe por separado y puede faltar: se toma la que esté. */
+  const PRUEBA_1 = (typeof PREGUNTAS_CPMAI_EXTRA !== 'undefined') ? PREGUNTAS_CPMAI_EXTRA : [];
+  const PRUEBA_2 = (typeof PREGUNTAS_CPMAI_EXTRA2 !== 'undefined') ? PREGUNTAS_CPMAI_EXTRA2 : [];
+
   const CONFIG_PAGINA = {
-    banco: PREGUNTAS_CPMAI.concat(
-      typeof PREGUNTAS_CPMAI_EXTRA !== 'undefined' ? PREGUNTAS_CPMAI_EXTRA : []),
+    banco: PREGUNTAS_CPMAI.concat(PRUEBA_1, PRUEBA_2),
     puntuadas: 100,
     notaBanco: 'Un examen completo necesita 120: 100 puntuadas repartidas 26 / 26 / 17 / 16 / 15 '
       + 'según los pesos del ECO, más 20 piloto. Mientras no se llegue ahí, los exámenes salen '
       + 'más cortos y el simulador lo dice en pantalla en vez de rellenar con repetidas.',
     modos: [
       {
-        /* La prueba de práctica de terceros, sola y completa. Trae su propio banco
-           para no mezclarse con las preguntas propias. Si el archivo adaptado no
-           está, el modo queda deshabilitado en vez de romper la página. */
+        /* Cada prueba de terceros, sola y completa. Traen su propio banco para no
+           mezclarse con las preguntas propias; si el archivo adaptado no está, el
+           modo queda deshabilitado en vez de romper la página. */
         id: 'prueba1',
         titulo: 'Examen de prueba 1: PMI-CPMAI - PMI Certified Professional in Managing AI Practice Test 1 en español',
         desc: 'La prueba de práctica completa traducida al español, sin mezclar con el banco propio. '
           + 'Mismo formato del examen real: de corrido y sin descansos.',
-        total: 120, minutos: 160, piloto: 20, secciones: 1,
-        banco: (typeof PREGUNTAS_CPMAI_EXTRA !== 'undefined' ? PREGUNTAS_CPMAI_EXTRA : [])
+        total: 120, minutos: 160, piloto: 20, secciones: 1, banco: PRUEBA_1
+      },
+      {
+        id: 'prueba2',
+        titulo: 'Examen de prueba 2: PMI-CPMAI - PMI Certified Professional in Managing AI Practice Test 2 en español',
+        desc: 'La segunda prueba de práctica traducida al español, también aparte del banco propio. '
+          + 'Mismo formato del examen real: de corrido y sin descansos.',
+        total: 120, minutos: 160, piloto: 20, secciones: 1, banco: PRUEBA_2
       },
       {
         id: 'completo', titulo: 'Examen completo',
