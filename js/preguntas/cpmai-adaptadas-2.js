@@ -2,10 +2,9 @@
  * Banco CPMAI adaptado de material de terceros — prueba de práctica 2.
  *
  * ⚠️ MISMO ORIGEN Y MISMAS CONDICIONES que `cpmai-adaptadas.js`, pero de la segunda
- *    prueba de práctica. Son 109 preguntas: de la 10 a la 120, menos la 73 y la
- *    110, que no se capturaron. Faltan también las nueve primeras. Escenarios y
- *    opciones son traducción adaptada del original; las explicaciones están
- *    reescritas.
+ *    prueba de práctica. Son 118 preguntas: de la 1 a la 120, menos la 73 y la 110,
+ *    que no se capturaron. Escenarios y opciones son traducción adaptada del
+ *    original; las explicaciones están reescritas.
  *
  *    Se publica por decisión explícita del autor del repositorio (2026-08-31).
  *    Borrar este archivo retira la prueba 2 sin tocar nada más: `cpmai.html` lo
@@ -15,7 +14,7 @@
  * y la tarea que declaraba la fuente (Domain I→responsable, 2→negocio, 3→datos,
  * 4→modelos, 5→operacion; «Task N» → índice N-1).
  *
- * Reparto: negocio 30 · datos 27 · modelos 18 · operacion 18 · responsable 16.
+ * Reparto: negocio 31 · datos 30 · modelos 19 · operacion 20 · responsable 18.
  */
 
 const PREGUNTAS_CPMAI_EXTRA2 = [
@@ -1360,6 +1359,118 @@ const PREGUNTAS_CPMAI_EXTRA2 = [
     ],
     correctas: ['a'],
     explicacion: 'Un retiro formal que archiva versiones, registra la decisión de baja y revoca el acceso a datos cierra el ciclo de vida de forma responsable: preserva la trazabilidad y elimina un sistema sin monitoreo que retiene datos de clientes. (d) crea un activo huérfano con acceso vivo a datos y sin dueño, una exposición de gobernanza y seguridad. (c) destruye el historial de auditoría que revisores o reguladores podrían necesitar después. (b) ignora que el modelo se construyó y validó para un uso específico, y una reutilización sin validar aumentaría el riesgo en lugar de reducirlo.'
+  },
+
+  // ══ Tercer lote ═══════════════════════════════════════════════════════════
+  // Las nueve primeras preguntas de la prueba.
+
+  {
+    id: 'cpy-res-017', dominio: 'responsable', tarea: 2, enfoque: 'predictivo', tipo: 'opcion',
+    enunciado: 'Una red de salud construye un modelo de triaje que prioriza a los pacientes de urgencias por agudeza predicha. El equipo de informática de enfermería pide al director del proyecto de IA confirmar que el modelo trata de forma consistente a pacientes con cuadros clínicos similares, con independencia de su tipo de cobertura, ya que los datos de seguro forman parte de las historias clínicas usadas para entrenar. ¿Qué debe indicar al equipo que haga?',
+    opciones: [
+      { id: 'a', texto: 'Agregar un botón de anulación a la interfaz de triaje que permita al personal de enfermería ajustar manualmente el puntaje de agudeza si lo cree incorrecto.' },
+      { id: 'b', texto: 'Validar el desempeño del modelo con métricas de exactitud global y área bajo la curva, que capturan la calidad predictiva agregada sobre todos los pacientes.' },
+      { id: 'c', texto: 'Quitar el estado de cobertura de la exportación de historias clínicas antes de transferir cualquier dato al entorno de desarrollo del modelo.' },
+      { id: 'd', texto: 'Revisar las salidas del modelo en busca de patrones discriminatorios entre grupos de cobertura y aplicar técnicas de mitigación de sesgo si aparecen disparidades.' }
+    ],
+    correctas: ['d'],
+    explicacion: 'Revisar las salidas entre grupos de cobertura y aplicar mitigación si hay disparidades evalúa directamente si el estado de seguro está influyendo en las recomendaciones de triaje de forma discriminatoria. (c) atiende una variable proxy posible, pero no asegura que otras correlacionadas con la cobertura no produzcan el mismo efecto. (a) permite corregir casos individuales, pero no es un mecanismo sistemático de detección de sesgo. (b) valida con métricas agregadas, y una exactitud global puede enmascarar un mal desempeño en subgrupos concretos.'
+  },
+  {
+    id: 'cpy-res-018', dominio: 'responsable', tarea: 1, enfoque: 'predictivo', tipo: 'opcion',
+    enunciado: 'Una empresa de software despliega un modelo de moderación de contenidos entrenado con una mezcla de reportes propios de clientes, publicaciones de foros extraídas públicamente y un corpus de terceros licenciado. Los reguladores piden a la empresa mostrar exactamente cómo se construyó el conjunto de entrenamiento. ¿Qué debe entregar el director del programa de IA?',
+    opciones: [
+      { id: 'a', texto: 'Una comparación de desempeño contra un sistema de moderación de referencia basado en reglas.' },
+      { id: 'b', texto: 'Un documento que describa cada fuente de datos, la proporción que representa dentro del conjunto de entrenamiento y las transformaciones aplicadas.' },
+      { id: 'c', texto: 'Los archivos crudos de entrenamiento en su formato original, para que el regulador los descargue.' },
+      { id: 'd', texto: 'Un resumen de las métricas de exactitud del modelo segmentado por categoría de contenido.' }
+    ],
+    correctas: ['b'],
+    explicacion: 'El reporte transparente sobre fuentes de datos y pasos de preprocesamiento exige documentar cada origen, cuánto aportó al conjunto y qué transformaciones se aplicaron: eso es lo que permite al regulador evaluar calidad, cumplimiento de licencias y sesgo potencial. (d) describe desempeño, no procedencia de los datos. (c) plantea problemas de licenciamiento y seguridad, y no entrega una trazabilidad estructurada. (a) describe desempeño relativo, no cómo se obtuvieron ni prepararon los datos.'
+  },
+  {
+    id: 'cpy-neg-031', dominio: 'negocio', tarea: 2, enfoque: 'predictivo', tipo: 'opcion',
+    enunciado: 'Una logística completó un taller exhaustivo de identificación de riesgos para su iniciativa de enrutamiento con IA, del que salió una larga lista de amenazas priorizadas. El patrocinador pregunta al director del proyecto qué viene a continuación antes de que el proyecto pueda avanzar. ¿Qué debe entregar?',
+    opciones: [
+      { id: 'a', texto: 'Una firma formal que transfiera todas las amenazas listadas al área de TI.' },
+      { id: 'b', texto: 'Una lámina resumen que presente las amenazas en la próxima reunión de directorio.' },
+      { id: 'c', texto: 'Respuestas planificadas y acciones de contingencia para las amenazas mejor priorizadas.' },
+      { id: 'd', texto: 'Una lista más larga que capture amenazas adicionales de menor probabilidad.' }
+    ],
+    correctas: ['c'],
+    explicacion: 'Definir respuestas planificadas y acciones de contingencia para las amenazas priorizadas convierte la identificación en mitigación accionable, que es el paso natural una vez que los riesgos están ordenados, y desarrollar estrategias de mitigación y planes de contingencia cierra el trabajo de evaluación de riesgos. (d) agrega volumen sin hacer el proyecto más seguro. (a) abandona la propiedad e ignora que muchas amenazas son de negocio o éticas antes que técnicas. (b) comunica la situación, pero deja cada amenaza sin atender.'
+  },
+  {
+    id: 'cpy-dat-028', dominio: 'datos', tarea: 8, enfoque: 'predictivo', tipo: 'opcion',
+    enunciado: 'La evaluación de datos de una minera reveló brechas serias en los registros de fallas de equipos de los que depende un modelo próximo. Algunos integrantes del equipo instan al director del proyecto de IA a suavizar los hallazgos en la presentación a la dirección, para que el programa conserve el impulso de financiamiento. ¿Cómo debe informar a la dirección?',
+    opciones: [
+      { id: 'a', texto: 'Posponer la presentación hasta que los resultados de la evaluación luzcan más favorables.' },
+      { id: 'b', texto: 'Reportar las brechas con exactitud, junto con sus implicaciones y opciones de remediación.' },
+      { id: 'c', texto: 'Enfatizar las fortalezas y reservar las brechas no resueltas hasta que estén corregidas.' },
+      { id: 'd', texto: 'Reenviar la salida cruda del perfilado del equipo, para que la dirección lo vea todo directamente.' }
+    ],
+    correctas: ['b'],
+    explicacion: 'Reportar las brechas con exactitud, con sus implicaciones y opciones de remediación, es lo correcto porque transmitir la comprensión de los datos a la dirección significa darles un panorama veraz de la preparación y una forma de actuar sobre él. (c) invita a la dirección a financiar un plan construido sobre información que el equipo sabe incompleta. (a) retiene justamente el estado que la presentación existe para entregar. (d) entierra a los ejecutivos en detalle técnico sin la traducción a términos de negocio que necesitan.'
+  },
+  {
+    id: 'cpy-dat-029', dominio: 'datos', tarea: 2, enfoque: 'predictivo', tipo: 'opcion',
+    enunciado: 'Un director de proyecto de IA en una cadena hotelera inicia la identificación de datos para un proyecto de personalización de huéspedes. La información relevante está dispersa entre un sistema de gestión de propiedades, una plataforma de fidelidad, un data mart de marketing y hojas de cálculo departamentales. Los científicos de datos quieren empezar a extraer de inmediato de los sistemas que ya conocen. ¿Qué debe hacer primero?',
+    opciones: [
+      { id: 'a', texto: 'Solicitar que se construya un almacén corporativo consolidado antes de cualquier trabajo de datos del proyecto.' },
+      { id: 'b', texto: 'Limitar el proyecto a la plataforma de fidelidad, porque sus datos son los más limpios de los cuatro.' },
+      { id: 'c', texto: 'Permitir que la extracción comience por los sistemas familiares, para que el proyecto muestre avance temprano.' },
+      { id: 'd', texto: 'Dirigir un inventario sistemático de las fuentes candidatas, con sus dueños y sus requisitos de acceso.' }
+    ],
+    correctas: ['d'],
+    explicacion: 'Mapear las fuentes candidatas junto con quién las controla y qué exige el acceso le da al proyecto un panorama completo antes de gastar esfuerzo de extracción, lo que evita fuentes olvidadas y retrabajo. (c) sustituye cobertura por conveniencia y arriesga descubrir mejores fuentes cuando los pipelines ya estén construidos. (a) es un programa mayor de infraestructura que el proyecto no necesita antes siquiera de saber qué datos importan. (b) optimiza la prolijidad sobre la completitud y excluiría el comportamiento del huésped que guardan los otros sistemas.'
+  },
+  {
+    id: 'cpy-dat-030', dominio: 'datos', tarea: 2, enfoque: 'predictivo', tipo: 'opcion',
+    enunciado: 'Un distrito escolar quiere un modelo de alerta temprana de asistencia. La oficina de registro y la de orientación mantienen registros de estudiantes que se solapan, y cada una reclama la última palabra sobre su sistema. La disputa está frenando la decisión sobre qué fuente puede usar el equipo de IA. ¿Qué debe hacer el director del proyecto de IA?',
+    opciones: [
+      { id: 'a', texto: 'Extraer de ambos sistemas ahora y reconciliar el solapamiento durante la preparación.' },
+      { id: 'b', texto: 'Resolver qué oficina es dueña de cada fuente y documentar los derechos de acceso concedidos.' },
+      { id: 'c', texto: 'Pausar el proyecto hasta que el distrito consolide los dos sistemas.' },
+      { id: 'd', texto: 'Elegir el sistema con más registros y avanzar con la aprobación de esa oficina.' }
+    ],
+    correctas: ['b'],
+    explicacion: 'Resolver y documentar la propiedad y los derechos de acceso es lo correcto porque identificar fuentes incluye establecer quién controla cada sistema, y una propiedad sin resolver reaparecerá después como bloqueo de acceso o hallazgo de auditoría. (a) esquiva el consentimiento de los dueños en disputa y podría violar la política de acceso. (d) ignora el reclamo de la otra oficina y la posibilidad de que sus registros sean los más relevantes. (c) ata el proyecto a un esfuerzo de consolidación distrital muy fuera de su control.'
+  },
+  {
+    id: 'cpy-mod-019', dominio: 'modelos', tarea: 1, enfoque: 'predictivo', tipo: 'opcion',
+    enunciado: 'Una logística construye un modelo de optimización de rutas. El director del proyecto de IA coordina el aseguramiento de calidad de la primera versión del modelo enviada a revisión. El equipo de ciencia de datos hizo pruebas internas, pero no ha ocurrido ninguna revisión por pares del diseño y no existe un protocolo de pruebas documentado. ¿Qué acción debe priorizar?',
+    opciones: [
+      { id: 'a', texto: 'Pedir al equipo de ciencia de datos que escriba un breve resumen de su enfoque de pruebas y tratarlo como el registro de calidad.' },
+      { id: 'b', texto: 'Establecer un protocolo de pruebas documentado y organizar una revisión por pares del diseño del modelo antes de que este avance.' },
+      { id: 'c', texto: 'Aceptar el modelo y programar una auditoría posterior al despliegue que verifique la calidad tras tres meses en producción.' },
+      { id: 'd', texto: 'Proceder al despliegue, ya que las pruebas internas se aprobaron.' }
+    ],
+    correctas: ['b'],
+    explicacion: 'Supervisar el control de calidad del modelo incluye establecer protocolos de prueba y coordinar revisiones por pares y validación técnica de los diseños: ambos elementos faltan aquí, así que establecer el protocolo y organizar la revisión es la prioridad correcta. (d) se salta la compuerta de calidad que la metodología exige. (a) un resumen de pruebas informales no constituye un protocolo documentado ni puede servir como registro de calidad. (c) difiere el aseguramiento de calidad a producción, donde las fallas son más caras y más difíciles de remediar.'
+  },
+  {
+    id: 'cpy-ope-019', dominio: 'operacion', tarea: 5, enfoque: 'predictivo', tipo: 'opcion',
+    enunciado: 'Una minorista de artículos para exteriores desplegó hace ocho meses un motor de recomendación de productos. El equipo de proyecto prepara el traspaso del sistema al grupo de operaciones. El director del programa descubre que el equipo de operaciones no tiene documentación que explique cómo interpretar los puntajes de confianza del modelo ni cuándo escalar anomalías al equipo de ciencia de datos. ¿Qué debe hacer antes de completar el traspaso?',
+    opciones: [
+      { id: 'a', texto: 'Pedir al equipo de ciencia de datos que quede de guardia durante seis meses después del traspaso, en lugar de documentación escrita.' },
+      { id: 'b', texto: 'Informar al equipo de operaciones que la interpretación de los puntajes de confianza queda fuera del alcance del plan de transición.' },
+      { id: 'c', texto: 'Producir manuales operativos que cubran la interpretación de los puntajes de confianza y los criterios de escalamiento, como parte del paquete de traspaso.' },
+      { id: 'd', texto: 'Retrasar el traspaso hasta que el equipo de ciencia de datos pueda reconstruir el modelo con salidas más simples.' }
+    ],
+    correctas: ['c'],
+    explicacion: 'Producir manuales operativos que cubran la interpretación de los puntajes y los criterios de escalamiento cumple la responsabilidad de crear documentación de traspaso y materiales de capacitación antes de que la transición se complete. (a) mantener a ciencia de datos de guardia como sustituto de la documentación crea dependencia y no construye capacidad operativa. (b) declarar el tema fuera de alcance abandona un elemento crítico del plan de transición. (d) retrasar el traspaso para reconstruir el modelo es una respuesta desproporcionada a un vacío de documentación.'
+  },
+  {
+    id: 'cpy-ope-020', dominio: 'operacion', tarea: 6, enfoque: 'predictivo', tipo: 'opcion',
+    enunciado: 'Una empresa solar desplegó un modelo de pronóstico de producción energética que alimenta sus operaciones de balanceo de red. El director del proyecto de IA desarrolla el plan de contingencia del sistema. El equipo de operaciones pregunta cuál debe ser el procedimiento de respuesta si el modelo produce pronósticos que se desvían fuertemente de las lecturas de sensores en tiempo real. ¿Qué debe especificar el plan de contingencia?',
+    opciones: [
+      { id: 'a', texto: 'Una notificación al proveedor de la plataforma de aprendizaje automático subyacente para que diagnostique la causa raíz.' },
+      { id: 'b', texto: 'Un procedimiento de respuesta a incidentes con umbrales de desviación definidos, pasos de escalamiento y un respaldo hacia el sistema de pronóstico basado en reglas anterior.' },
+      { id: 'c', texto: 'El apagado inmediato del modelo de pronóstico y balanceo manual de la red hasta que el equipo de IA resuelva el problema.' },
+      { id: 'd', texto: 'El reentrenamiento automático del modelo con los datos de sensores más recientes cada vez que se detecten desviaciones.' }
+    ],
+    correctas: ['b'],
+    explicacion: 'Un procedimiento de respuesta con umbrales definidos, escalamiento y respaldo al sistema de reglas anterior es lo correcto, porque supervisar el plan de contingencia exige desarrollar procedimientos para fallas del sistema de IA, incluidas rutas de escalamiento y alternativas de continuidad del negocio. (c) apagar el modelo por completo sin una respuesta graduada es desproporcionado y operativamente disruptivo para una aplicación de red crítica para la seguridad. (d) reentrenar automáticamente con datos anómalos podría amplificar el problema, al entrenar justo sobre la desviación que disparó la alarma. (a) derivar el incidente al proveedor como respuesta primaria introduce demoras y evita la estructura interna de escalamiento que el plan debe definir.'
   }
 ];
 
