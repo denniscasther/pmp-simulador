@@ -118,9 +118,12 @@
 
     $('modos').innerHTML = '';
     MODOS.forEach(function (m) {
-      const disponibles = m.dominios
-        ? m.dominios.reduce((a, id) => a + cob[id], 0)
-        : BANCO.length;
+      // Un modo puede traer su propio banco acotado; si no, usa el general.
+      const disponibles = m.banco
+        ? m.banco.length
+        : m.dominios
+          ? m.dominios.reduce((a, id) => a + cob[id], 0)
+          : BANCO.length;
 
       const b = document.createElement('button');
       b.className = 'tarjeta';
@@ -332,7 +335,7 @@
   // ── Examen ────────────────────────────────────────────────────────────────
 
   function iniciar(modo) {
-    ex = M.crearExamen(BANCO, {
+    ex = M.crearExamen(modo.banco || BANCO, {
       total: modo.total,
       minutos: modo.minutos,
       dominios: modo.dominios,
