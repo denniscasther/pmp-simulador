@@ -168,6 +168,7 @@
 <script src="js/preguntas/cpmai-adaptadas-2.js" onerror="void 0"></script>
 <script src="js/preguntas/cpmai-adaptadas-3.js" onerror="void 0"></script>
 <script src="js/preguntas/cpmai-adaptadas-4.js" onerror="void 0"></script>
+<script src="js/preguntas/cpmai-adaptadas-5.js" onerror="void 0"></script>
 <script src="js/motor.js"></script>
 <script>
   /* El formato del PMI-CPMAI, tomado del ECO oficial: 120 preguntas totales,
@@ -178,9 +179,10 @@
   const PRUEBA_2 = (typeof PREGUNTAS_CPMAI_EXTRA2 !== 'undefined') ? PREGUNTAS_CPMAI_EXTRA2 : [];
   const PRUEBA_3 = (typeof PREGUNTAS_CPMAI_EXTRA3 !== 'undefined') ? PREGUNTAS_CPMAI_EXTRA3 : [];
   const PRUEBA_4 = (typeof PREGUNTAS_CPMAI_EXTRA4 !== 'undefined') ? PREGUNTAS_CPMAI_EXTRA4 : [];
+  const PRUEBA_5 = (typeof PREGUNTAS_CPMAI_EXTRA5 !== 'undefined') ? PREGUNTAS_CPMAI_EXTRA5 : [];
 
   const CONFIG_PAGINA = {
-    banco: PREGUNTAS_CPMAI.concat(PRUEBA_1, PRUEBA_2, PRUEBA_3, PRUEBA_4),
+    banco: PREGUNTAS_CPMAI.concat(PRUEBA_1, PRUEBA_2, PRUEBA_3, PRUEBA_4, PRUEBA_5),
     puntuadas: 100,
     notaBanco: 'Un examen completo necesita 120: 100 puntuadas repartidas 26 / 26 / 17 / 16 / 15 '
       + 'según los pesos del ECO, más 20 piloto. Mientras no se llegue ahí, los exámenes salen '
@@ -216,6 +218,13 @@
         desc: 'La cuarta prueba de práctica traducida al español, también aparte del banco propio. '
           + 'Mismo formato del examen real: de corrido y sin descansos.',
         total: 120, minutos: 160, piloto: 20, secciones: 1, banco: PRUEBA_4
+      },
+      {
+        id: 'prueba5',
+        titulo: 'Examen de prueba 5: PMI-CPMAI - PMI Certified Professional in Managing AI Practice Test 5 en español',
+        desc: 'La quinta prueba de práctica traducida al español, separada del banco propio. '
+          + 'Mismo formato del examen real: de corrido y sin descansos.',
+        total: 120, minutos: 160, piloto: 20, secciones: 1, banco: PRUEBA_5
       },
       {
         id: 'completo', titulo: 'Examen completo',
