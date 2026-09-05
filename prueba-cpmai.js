@@ -21,7 +21,8 @@ function cargarAdaptado(ruta, clave) {
 }
 const PREGUNTAS_EXTRA = cargarAdaptado('./js/preguntas/cpmai-adaptadas.js', 'PREGUNTAS_CPMAI_EXTRA')
   .concat(cargarAdaptado('./js/preguntas/cpmai-adaptadas-2.js', 'PREGUNTAS_CPMAI_EXTRA2'))
-  .concat(cargarAdaptado('./js/preguntas/cpmai-adaptadas-3.js', 'PREGUNTAS_CPMAI_EXTRA3'));
+  .concat(cargarAdaptado('./js/preguntas/cpmai-adaptadas-3.js', 'PREGUNTAS_CPMAI_EXTRA3'))
+  .concat(cargarAdaptado('./js/preguntas/cpmai-adaptadas-4.js', 'PREGUNTAS_CPMAI_EXTRA4'));
 const TODAS = PREGUNTAS_CPMAI.concat(PREGUNTAS_EXTRA);
 
 let ok = 0, fallos = [];

@@ -14,8 +14,8 @@ Se cambia entre ambas con el selector de arriba. Comparten motor e interfaz: `mo
 recibe el formato de cada examen y lo respeta sin saber de qué certificación se trata,
 y `app.js` se parametriza con `CONFIG_PAGINA`, que cada página declara.
 
-**CPMAI** trae su propio ECO 2025 —5 dominios, 37 tareas, 395 preguntas: 38 propias que
-cubren las 37 tareas, más 357 adaptadas de terceros (ver la excepción más abajo)—
+**CPMAI** trae su propio ECO 2025 —5 dominios, 37 tareas, 515 preguntas: 38 propias que
+cubren las 37 tareas, más 477 adaptadas de terceros (ver la excepción más abajo)—
 y una pestaña de **32 conceptos de IA con 8 diagramas**, porque no hay libro que comprar:
 PMI vende el curso y el ECO es un índice.
 
@@ -52,6 +52,7 @@ Esos archivos **no son material propio** y por eso viven aparte del banco de
 | `cpmai-adaptadas.js` | 119 preguntas · prueba de práctica 1 (falta la 119 del original) |
 | `cpmai-adaptadas-2.js` | 118 preguntas · prueba de práctica 2 (faltan la 73 y la 110) |
 | `cpmai-adaptadas-3.js` | **120 preguntas · prueba de práctica 3, completa** |
+| `cpmai-adaptadas-4.js` | **120 preguntas · prueba de práctica 4, completa** |
 
 Están adaptadas al español desde las pruebas de práctica de un simulador comercial
 de terceros: los escenarios y las opciones son traducción adaptada del original, y
